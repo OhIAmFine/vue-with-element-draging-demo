@@ -1,12 +1,12 @@
 <template>
 <div class='drag-content'>
   <div class='project-content'>
-    <div class='select-item' draggable='true' @dragstart='drag($event)' v-for='pjdt in projectdatas'>{{pjdt.name}}</div>
+    <div class='select-item' draggable='true' @dragstart='drag($event)' v-for='fruit in fruits'>{{fruit.name}}</div>
   </div>
   <div class='people-content'>
-    <div class='drag-div' v-for='(ppindex,ppdt) in peopledata' @drop='drop($event)' @dragover='allowDrop($event)'>
+    <div class='drag-div' v-for='(preson,presonId) in people' @drop='drop($event)' @dragover='allowDrop($event)'>
       <div class='select-project-item'>
-        <label class='drag-people-label'>{{ppdt.name}}:</label>
+        <label class='drag-people-label'>{{preson.name}}:</label>
       </div>
     </div>
   </div>
@@ -17,25 +17,26 @@
 <script>
 let dom = null
 export default {
-  components: {
-  },
-  ready: function() {
-  },
-  methods: {
+  methods: {//拖拽方法
     drag:function(event){
        dom = event.currentTarget
     },
-    drop:function(event){
+
+    drop:function(event){//放置时加入元素
+      if(event.target.className !== 'select-item'){
       event.preventDefault();
       event.target.appendChild(dom);
+    }
     },
-    allowDrop:function(event){
+
+    allowDrop:function(event){//阻止放置时默认事件
       event.preventDefault();
     },
   },
+
   data() {
     return {
-      projectdatas:[{
+      fruits:[{
         id:1,
         name:'葡萄',
       },{
@@ -48,18 +49,18 @@ export default {
         id:4,
         name:'榴莲',
       }],
-      peopledata:[{
+      people:[{
         id:1,
-        name:'小颖',
+        name:'大雄',
       },{
         id:2,
-        name:'hover',
+        name:'胖虎',
       },{
         id:3,
-        name:'空巢青年三 ',
+        name:'胖虎爸爸 ',
       },{
         id:3,
-        name:'一丢丢',
+        name:'胖虎爷爷',
       }]
     }
   }
