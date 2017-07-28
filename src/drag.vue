@@ -4,7 +4,7 @@
     <div class='select-item' draggable='true' @dragstart='drag($event)' v-for='fruit in fruits'>{{fruit.name}}</div>
   </div>
   <div class='people-content'>
-    <div class='drag-div' v-for='(preson,presonId) in people' @drop='drop($event)' @dragover='allowDrop($event)'>
+    <div class='drag-div' draggable="true" @dragstart='peopleDrag($event)' v-for='(preson,presonId) in people' @drop='drop($event)' @dragover='allowDrop($event)'>
       <div class='select-project-item'>
         <label class='drag-people-label'>{{preson.name}}:</label>
       </div>
@@ -15,22 +15,53 @@
 
 
 <script>
-let dom = null
+let dom = null;
+let domPeople = null;
+function changePosition(eleStart,eleTar){
+  if(eleStart.parentNode == eleTar.parentNode){
+    // console.log("test");
+    // var newEle = ele;
+    // ele = eleTar;
+    if(eleStart.nextSibling != eleTar){
+    var nextEle = eleStart.nextSibling;
+    // var newEle = eleTar;
+
+    eleStart.parentNode.replaceChild(eleStart,eleTar);
+    eleStart.parentNode.insertBefore(eleTar,nextEle);
+
+    // ele.parentNode.insertBefore(newEle,eleStart);
+    // console.log(newEle)
+  }else{
+    eleStart.parentNode.insertBefore(eleTar,eleStart);
+  }
+}
+}
 export default {
   methods: {//拖拽方法
     drag:function(event){
-       dom = event.currentTarget
+       dom = event.currentTarget;
+       console.log('dom' + dom);
     },
+    peopleDrag:function(event){
+      dom = event.currentTarget;
+       console.log(dom);
 
+    },
     drop:function(event){//放置时加入元素
-      if(event.target.className !== 'select-item'){
+      if(event.target.className == 'drag-div'){
+      console.log('test1');
+      changePosition(dom,event.target)
+    }
+    if(event.target.className !== 'select-item' && dom.className !== 'drag-div'){
       event.preventDefault();
       event.target.appendChild(dom);
     }
+    // if(j )
     },
 
     allowDrop:function(event){//阻止放置时默认事件
       event.preventDefault();
+      event.currentTarget.style.borderColor = 'red';
     },
   },
 
